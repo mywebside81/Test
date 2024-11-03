@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahulpali College</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #000;
+        }
+        /* Header */
+        .header {
+            background-color: #a7f1f2;
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        /* Ads Section */
+        .ads-section {
+            background-color: #fbc02d;
+            width: 100%;
+            height: 180px;
+            max-width: 320px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 15px;
+            margin: 20px 20px;
+        }
+        .ads-section img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        /* Profile Card */
+        .profile-card {
+            background-color: #d36dee;
+            color: #fff;
+            padding: 15px;
+            margin: 20px auto;
+            width: 90%;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .profile-card img {
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            margin-right: 15px;
+        }
+        .profile-info {
+            flex: 1;
+        }
+        .profile-number {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        /* Delete Button */
+        .delete-button {
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            position: absolute;
+            right: 10px;
+            display: none; /* Hidden by default */
+        }
+        /* Add Button */
+        .add-button {
+            background-color: #00cec9;
+            color: #fff;
+            width: 80px;
+            height: 80px;
+            border-radius: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px auto;
+            font-size: 40px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .add-button:hover {
+            background-color: #0984e3;
+        }
+        /* Form Container */
+        .form-container {
+            text-align: center;
+            margin: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">Mahulpali College</div>
+
+    <!-- Ads Section -->
+    <div class="ads-section">
+        <img src="Banner.png.gif" alt="Advertisement"> <!-- Replace 'Banner.png.gif' with your actual image path -->
+    </div>
+
+    <!-- Profiles Container -->
+    <div id="profiles-container"></div>
+
+    <!-- Add Button -->
+    <div id="add-button" class="add-button" onclick="handleAddButtonClick()">+</div>
+
+    <!-- Form for Adding Profile -->
+    <div id="form-container" class="form-container hidden">
+        <input type="text" id="name-input" placeholder="Enter Name"><br><br>
+        <input type="file" id="image-input" accept="image/*"><br><br>
+        <button onclick="addProfileCard()">Save</button>
+    </div>
+
+    <script>
+        let profiles = JSON.parse(localStorage.getItem("profiles")) || [];
+        let profileCount = profiles.length;
+
+        // Function to load profiles from Local Storage
+        function loadProfiles() {
+            const profilesContainer = document.getElementById("profiles-container");
+            profilesContainer.innerHTML = "";
+            profiles.forEach((profile, index) => {
+                createProfileCard(profile.name, profile.image, index + 1);
+            });
+        }
+
+        // Handle Add Button Click
+        function handleAddButtonClick() {
+            const id = prompt("Enter ID:");
+            const password = prompt("Enter Password:");
+            if (id === "Rajkumar" && password === "1") {
+                document.getElementById("form-container").classList.remove("hidden");
+                document.getElementById("add-button").classList.add("hidden");
+            } else {
+                alert("Incorrect ID or Password!");
+            }
+        }
+
+        // Add Profile Card
+        function addProfileCard() {
+            const nameInput = document.getElementById("name-input").value.trim();
+            const imageInput = document.getElementById("image-input").files[0];
+
+            if (!nameInput || !imageInput) {
+                alert("Please enter a name and select an image.");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                profileCount++;
+                const profile = { name: nameInput, image: event.target.result };
+                profiles.push(profile);
+                localStorage.setItem("profiles", JSON.stringify(profiles));
+                createProfileCard(nameInput, event.target.result, profileCount);
+
+                // Reset form and hide it
+                document.getElementById("name-input").value = "";
+                document.getElementById("image-input").value = "";
+                document.getElementById("form-container").classList.add("hidden");
+                document.getElementById("add-button").classList.remove("hidden");
+
+                alert("Profile Added Successfully!");
+            };
+            reader.readAsDataURL(imageInput);
+        }
+
+        // Function to create a profile card
+        function createProfileCard(name, image, number) {
+            const profilesContainer = document.getElementById("profiles-container");
+
+            const profileCard = document.createElement("div");
+            profileCard.className = "profile-card";
+
+            const imgElement = document.createElement("img");
+            imgElement.src = image;
+            imgElement.alt = "Profile Image";
+
+            const profileInfo = document.createElement("div");
+            profileInfo.className = "profile-info";
+
+            const nameElement = document.createElement("div");
+            nameElement.className = "profile-name";
+            nameElement.textContent = name;
+
+            const numberElement = document.createElement("div");
+            numberElement.className = "profile-number";
+            numberElement.textContent = number;
+
+            const deleteButton = document.createElement("button");
+            deleteButton.className = "delete-button";
+            deleteButton.textContent = "Delete";
+
+            // Delete button functionality
+            deleteButton.onclick = function() {
+                const id = prompt("Enter ID to delete:");
+                const password = prompt("Enter Password to delete:");
+                if (id === "Rajkumar" && password === "1") {
+                    profiles = profiles.filter((_, index) => index !== number - 1);
+                    localStorage.setItem("profiles", JSON.stringify(profiles));
+                    loadProfiles();
+                    alert("Profile Deleted Successfully!");
+                } else {
+                    alert("Incorrect ID or Password!");
+                }
+            };
+
+            // Triple Tap Implementation
+            let tapCount = 0;
+            profileInfo.addEventListener("click", function() {
+                tapCount++;
+                setTimeout(() => {
+                    if (tapCount === 3) {
+                        deleteButton.style.display = deleteButton.style.display === "none" ? "block" : "none";
+                        tapCount = 0; // Reset tap count
+                    } else {
+                        tapCount = 0; // Reset tap count after a delay if not a triple tap
+                    }
+                }, 400); // Delay to count triple taps
+            });
+
+            profileCard.appendChild(imgElement);
+            profileInfo.appendChild(nameElement);
+            profileInfo.appendChild(numberElement);
+            profileCard.appendChild(profileInfo);
+            profileCard.appendChild(deleteButton); // Append the delete button to the card
+            profilesContainer.appendChild(profileCard);
+        }
+
+        // Load profiles on page load
+        window.onload = loadProfiles;
+    </script>
+</body>
+</html>
