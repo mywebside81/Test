@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoology Department</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">Zoology Department</div>
+
+    <div class="image-section">
+        <div class="image-card">
+            <img src="Sanjib.png" alt="Rajkumar Toppo">
+            <div class="name">Rajkumar Toppo</div>
+        </div>
+        <div class="image-card">
+            <img src="Nimila.png" alt="Rajkumar Toppo">
+            <div class="name">Rajkumar Toppo</div>
+        </div>
+    </div>
+
+    <div class="profile-card-container" id="profileCardContainer"></div>
+
+    <div class="add-button" onclick="authenticateUser()">+</div>
+
+    <!-- Add Form Section -->
+    <div class="add-form" id="addForm">
+        <h3>Add New Profile</h3>
+        <input type="text" id="name" placeholder="Enter Name">
+        <input type="text" id="className" placeholder="Enter Class">
+        <input type="text" id="rollNumber" placeholder="Enter Roll Number">
+        <input type="text" id="phoneNumber" placeholder="Enter Phone Number">
+        <input type="file" id="imageFile" accept="image/*">
+        <button onclick="addProfile()">Add Profile</button>
+    </div>
+
+    <script src="script2.js"></script>
+</body>
+</html>
